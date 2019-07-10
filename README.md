@@ -1,3 +1,4 @@
 # TouristGuide
 
-Прототип: #![](TouristGuide_v1.gif)
+Рабочий прототип: 
+#![](TouristGuide_v1.gif)
