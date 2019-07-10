@@ -1,3 +1,3 @@
 # TouristGuide
 
-Прототип: #![](TouristApp1.gif)
+Прототип: #![](TouristGuide_v1.gif)
