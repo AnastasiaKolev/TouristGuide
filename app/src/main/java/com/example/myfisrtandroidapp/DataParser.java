@@ -31,7 +31,8 @@ public class DataParser {
             }
             if (!googlePlaceJSON.isNull("opening_hours"))
             {
-                open_now = googlePlaceJSON.getJSONObject("opening_hours").getString("open_now");
+                Boolean open = googlePlaceJSON.getJSONObject("opening_hours").getBoolean("open_now");
+                open_now = open.toString();
             }
             latitude = googlePlaceJSON.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJSON.getJSONObject("geometry").getJSONObject("location").getString("lng");

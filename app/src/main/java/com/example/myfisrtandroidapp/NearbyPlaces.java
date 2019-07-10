@@ -64,7 +64,7 @@ public class NearbyPlaces extends AsyncTask<Object, String, String> {
 
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
-            if (open_hours.equals(true)) {
+            if (open_hours.equals("true")) {
                 markerOptions.title(nameOfPlace + "\n" + vicinity + "\nOpen now");
             }
             markerOptions.title(nameOfPlace + "\n" + vicinity);

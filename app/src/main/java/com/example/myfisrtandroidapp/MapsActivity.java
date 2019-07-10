@@ -260,7 +260,7 @@ public class MapsActivity extends FragmentActivity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private int ProximityRadius = 5000;
+    private int ProximityRadius = 2000;
 
     public void onMuseumClick(View v) {
         String museum = "museum";
