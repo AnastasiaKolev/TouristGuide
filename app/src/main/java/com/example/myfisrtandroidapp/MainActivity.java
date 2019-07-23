@@ -8,7 +8,7 @@ import android.widget.EditText;
 import androidx.fragment.app.FragmentActivity;
 
 public class MainActivity extends FragmentActivity {
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    public static final String EXTRA_MESSAGE = "com.example.myfisrtandroidapp.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

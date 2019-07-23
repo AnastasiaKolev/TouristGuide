@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.myfisrtandroidapp.ui.LoginActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -25,7 +26,7 @@ public class DisplayMessageActivity extends FragmentActivity {
         setContentView(R.layout.activity_display_message);
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
 
         TextView textView = findViewById(R.id.textView);
         textView.setText("Welcome to Saint Petersburg, " + message);
