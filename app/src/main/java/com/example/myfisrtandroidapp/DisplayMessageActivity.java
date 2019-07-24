@@ -34,7 +34,7 @@ public class DisplayMessageActivity extends FragmentActivity {
 
     public void openMap(View view) {
         if(isServicesOK()) {
-            Intent intent = new Intent(this, MapsActivity.class);
+            Intent intent = new Intent(this, UserPlacesActivity.class);
 
             startActivity(intent);
         }

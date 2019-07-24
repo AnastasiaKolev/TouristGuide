@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/filter_chip_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Places Preferences"
+        tools:textSize="30sp" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/filter_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/museum_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/museum"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/church_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/church"
+            android:checkable="true"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/art_gallery_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/art_gallery"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/aquarium_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/aquarium"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/zoo_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/zoo"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/amusement_park_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/amusement_park"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/city_hall_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/city_hall"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/mosque_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/mosque"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/park_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/park"
+            android:textSize="24sp" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/TextAppearance.MaterialComponents.Chip"
+            android:id="@+id/synagogue_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:checkable="true"
+            android:text="@string/synagogue"
+            android:textSize="24sp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <Button
+        android:id="@+id/buttonSavePlaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/theme_button"
+        android:onClick="savePlaces"
+        android:text="@string/button_save_places"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+
+</LinearLayout>

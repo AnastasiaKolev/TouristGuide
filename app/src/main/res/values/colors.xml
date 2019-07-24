@@ -3,7 +3,16 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="darkGrey">#737373 </color>
+    <color name="darkGrey">#737373</color>
     <color name="linkBlue">#4d94ff</color>
-    <color name="Black">#000 </color>
+    <color name="black">#000</color>
+    <color name="white">#FFF</color>
+
+    <!--colors for profile-->
+    <color name="profilePrimaryDark">#FF3B30</color>
+    <color name="profileAccentColor">#F7F7F7</color>
+    <color name="whiteTextColor">#fff</color>
+    <color name="profileBackground">#fff</color>
+    <color name="blackTextColor">#000</color>
+    <color name="profileEditTextColor">#707070</color>
 </resources>
