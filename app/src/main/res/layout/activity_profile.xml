@@ -52,6 +52,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/pref"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="developer@appsnipp.com"
@@ -59,13 +60,26 @@
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/buttonBackHome"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Back to\nHome"
-                    android:onClick="backButton"
-                    android:textColor="@color/white" />
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/profileBackground"
+                    android:clickable="true"
+                    android:onClick="backButton">
+
+                    <View
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/profile_bk"/>
+
+                    <TextView
+                        android:text="Back to\nHome"
+                        style="@style/profileStyledBackButton" />
+                </RelativeLayout>
 
             </LinearLayout>
 

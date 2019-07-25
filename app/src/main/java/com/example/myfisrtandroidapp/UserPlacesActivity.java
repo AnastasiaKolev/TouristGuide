@@ -8,14 +8,20 @@ import android.widget.CompoundButton;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.myfisrtandroidapp.models.UserPreferences;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserPlacesActivity extends FragmentActivity {
     private final String TAG = "Chips Example";
     private HashMap<String, Boolean> mPreferences = new HashMap<>();
+    private ArrayList<String> aPreferences = new ArrayList<>();
+    private Set<String> setPref = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,18 @@ public class UserPlacesActivity extends FragmentActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, buttonView.getId() + "");
+                if (museum_chip.isChecked()) {
+                    mPreferences.replace("museum", true);
+                    setPref.add("museum");
+                }
+                if (church_chip.isChecked()) {
+                    mPreferences.replace("church", true);
+                    setPref.add("church");
+                }
+                if (art_gallery_chip.isChecked()) {
+                    mPreferences.replace("art_gallery", true);
+                    setPref.add("art_gallery");
+                }
             }
         };
         museum_chip.setOnCheckedChangeListener(filterChipListener);
@@ -42,8 +60,6 @@ public class UserPlacesActivity extends FragmentActivity {
         art_gallery_chip.setOnCheckedChangeListener(filterChipListener);
 
         museum_chip.setChecked(mPreferences.get("museum"));
-        church_chip.setChecked(mPreferences.get("church"));
-        art_gallery_chip.setChecked(mPreferences.get("art_gallery"));
     }
 
     public void savePlaces(View view) {
@@ -51,5 +67,14 @@ public class UserPlacesActivity extends FragmentActivity {
 
         startActivity(intent);
 
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        setPref = mPreferences.keySet();
+
+        for (String s : setPref) {
+            aPreferences.add(s);
+        }
+
+        userPreferences.setPreferences(aPreferences);
+        Log.d(TAG,"Ayyyyy"  + userPreferences.getPreferences().toString());
     }
 }

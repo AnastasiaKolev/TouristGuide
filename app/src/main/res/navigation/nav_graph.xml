@@ -13,14 +13,14 @@
         <argument android:name="myarg" android:defaultValue="@null" />
         <action
             android:id="@+id/textView"
-            app:destination="@+id/displayMessageActivity" />
+            app:destination="@+id/profileActivity" />
     </dialog>
 
     <dialog
-        android:id="@+id/displayMessageActivity"
-        android:name="com.example.myfisrtandroidapp.DisplayMessageActivity"
-        android:label="activity_display_message"
-        tools:layout="@layout/activity_display_message">
+        android:id="@+id/profileActivity"
+        android:name="com.example.myfisrtandroidapp.ProfileActivity"
+        android:label="profileActivity"
+        tools:layout="@layout/activity_profile">
         <argument android:name="myarg" android:defaultValue="@null" />
         <action
             android:id="@+id/buttonOpenMap"

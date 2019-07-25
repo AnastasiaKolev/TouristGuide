@@ -22,11 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DisplayMessageActivity" >
+        <activity android:name=".MainActivity" >
         </activity>
         <activity android:name=".UserPlacesActivity" >
-        </activity>
-        <activity android:name=".MainActivity" >
         </activity>
         <activity android:name=".ProfileActivity" >
         </activity>

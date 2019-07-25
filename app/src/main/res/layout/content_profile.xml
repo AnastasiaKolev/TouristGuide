@@ -60,9 +60,11 @@
                 style="@style/profileDetailsTextMain" />
 
             <TextView
-                android:text="12-05-1990"
+                android:id="@+id/prefDetails"
+                android:autoSizeTextType="uniform"
                 android:layout_toRightOf="@id/prefTextView"
-                style="@style/profileDetailsMiniText" />
+                style="@style/profileDetailsMiniText"
+                android:text="1"/>
 
         </RelativeLayout>
 

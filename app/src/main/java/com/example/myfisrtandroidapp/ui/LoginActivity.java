@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.myfisrtandroidapp.DisplayMessageActivity;
+import com.example.myfisrtandroidapp.MainActivity;
 import com.example.myfisrtandroidapp.R;
 import com.example.myfisrtandroidapp.UserClient;
 import com.example.myfisrtandroidapp.models.User;
@@ -103,7 +103,7 @@ public class LoginActivity extends FragmentActivity implements
                         }
                     });
 
-                    Intent intent = new Intent(LoginActivity.this, DisplayMessageActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, userCurr.getEmail());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
