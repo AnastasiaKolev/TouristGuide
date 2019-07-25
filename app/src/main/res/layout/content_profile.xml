@@ -28,6 +28,7 @@
                 style="@style/profileDetailsTextMain" />
 
             <TextView
+                android:id="@+id/nameDetails"
                 android:text="developer"
                 android:layout_toEndOf="@id/nameTextView"
                 style="@style/profileDetailsMiniText" />
@@ -44,6 +45,7 @@
                 style="@style/profileDetailsTextMain" />
 
             <TextView
+                android:id="@+id/emailDetails"
                 android:text="developer@appsnipp.com"
                 android:layout_toEndOf="@id/emailTextView"
                 style="@style/profileDetailsMiniText" />
@@ -69,6 +71,29 @@
         </RelativeLayout>
 
         <View style="@style/proifleDetailsView" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="backButton">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:id="@+id/backButton"
+                style="@style/profileStyledBackButton"
+                android:text="Back to\nHome"
+                android:textColor="@color/white"
+                android:onClick="backButton"/>
+        </RelativeLayout>
 
     </LinearLayout>
 

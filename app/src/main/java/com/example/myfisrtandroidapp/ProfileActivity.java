@@ -39,13 +39,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         UserPreferences userPreferences = UserPreferences.getInstance();
         ArrayList<String> all = userPreferences.getPreferences();
-        TextView mPlacesLists = findViewById(R.id.prefDetails);
+
+        TextView mPlacesLists = findViewById(R.id.prefDetails);;
         StringBuilder allPref = new StringBuilder();
         Log.d(TAG, "dgkkbfdgskb" + all);
 
         for (String s : all) {
             if (allPref.length() > 0) {
-                allPref.append(",");
+                allPref.append(", ");
             }
             allPref.append(s);
         }
@@ -54,10 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
         mPlacesLists.setText(allPref.toString());
         TextViewCompat.setAutoSizeTextTypeWithDefaults(mPlacesLists, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
 
-//        getUserDetails();
-//
-//        TextView mName = findViewById(R.id.nameTextView);
-//        mPlacesLists.setText(n);
+        mDb = FirebaseFirestore.getInstance();
+        getUserDetails();
     }
 
     public void backButton(View view) {
@@ -75,6 +74,15 @@ public class ProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: successfully set the user client.");
                     User user = task.getResult().toObject(User.class);
+                    ((UserClient)getApplicationContext()).getUser();
+                    TextView mUserName = findViewById(R.id.nameDetails);
+                    TextView mEmail = findViewById(R.id.emailDetails);
+                    TextView mMainName = findViewById(R.id.nameMain);
+                    TextView mMainEmail = findViewById(R.id.emailMain);
+                    mUserName.setText(user.getUsername());
+                    mMainName.setText(user.getUsername());
+                    mEmail.setText(user.getEmail());
+                    mMainEmail.setText(user.getEmail());
                 }
             }
         });

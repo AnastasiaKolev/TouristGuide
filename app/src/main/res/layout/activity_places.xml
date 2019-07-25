@@ -10,9 +10,10 @@
         android:id="@+id/filter_chip_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Places Preferences"
-        tools:textSize="30sp" />
+        android:layout_margin="24dp"
+        android:text="@string/places_preferences"
+        android:gravity="center"
+        android:textSize="36sp" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/filter_chip_group"
@@ -126,8 +127,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@drawable/theme_button"
+        android:background="@drawable/button_open_map"
         android:onClick="savePlaces"
+        android:layout_gravity="center"
         android:text="@string/button_save_places"
         android:textColor="@android:color/white"
         android:textSize="24sp" />
