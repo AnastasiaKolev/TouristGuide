@@ -63,10 +63,6 @@ public class UserPlacesActivity extends FragmentActivity {
     }
 
     public void savePlaces(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-
-        startActivity(intent);
-
         UserPreferences userPreferences = UserPreferences.getInstance();
         setPref = mPreferences.keySet();
 
@@ -75,6 +71,10 @@ public class UserPlacesActivity extends FragmentActivity {
         }
 
         userPreferences.setPreferences(aPreferences);
-        Log.d(TAG,"Ayyyyy"  + userPreferences.getPreferences().toString());
+        Log.d(TAG,"Preferences LIST: "  + userPreferences.getPreferences().toString());
+
+        Intent intent = new Intent(this, ProfileActivity.class);
+
+        startActivity(intent);
     }
 }
