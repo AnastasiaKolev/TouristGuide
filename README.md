@@ -1,4 +1,6 @@
 # TouristGuide
 
-Рабочий прототип: 
+Рабочий прототип:
+
 #![](TouristGuide_v1.gif)
+#![](LoginActivity.gif)
