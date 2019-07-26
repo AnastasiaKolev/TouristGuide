@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+    //NavController navController;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Tourist Guide");
         setSupportActionBar(toolbar);
+        //navController = Navigation.findNavController(this, R.id.nav_host_fragment);
     }
 
     public void openMap(View view) {

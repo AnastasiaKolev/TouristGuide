@@ -38,6 +38,7 @@ public class LoginActivity extends FragmentActivity implements
 
     //Firebase
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private User user;
 
     // widgets
     private EditText mEmail, mPassword;
@@ -97,7 +98,7 @@ public class LoginActivity extends FragmentActivity implements
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if(task.isSuccessful()){
                                 Log.d(TAG, "onComplete: successfully set the user client.");
-                                User user = task.getResult().toObject(User.class);
+                                user = task.getResult().toObject(User.class);
                                 ((UserClient)(getApplicationContext())).setUser(user);
                             }
                         }
@@ -146,7 +147,6 @@ public class LoginActivity extends FragmentActivity implements
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             hideDialog();
-
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override

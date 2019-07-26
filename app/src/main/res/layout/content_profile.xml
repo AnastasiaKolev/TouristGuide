@@ -63,10 +63,10 @@
 
             <TextView
                 android:id="@+id/prefDetails"
-                android:autoSizeTextType="uniform"
-                android:layout_toRightOf="@id/prefTextView"
                 style="@style/profileDetailsMiniText"
-                android:text="1"/>
+                android:layout_toRightOf="@id/prefTextView"
+                android:autoSizeTextType="uniform"
+                android:text="@string/museum" />
 
         </RelativeLayout>
 

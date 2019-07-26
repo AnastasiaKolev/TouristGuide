@@ -55,6 +55,26 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity
         implements OnMapReadyCallback {
 
+    private static final String TAG = "MapActivity";
+    private Location currentLocation;
+
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final float DEFAULT_ZOOM = 15f;
+
+    private FirebaseFirestore mDb;
+    private UserLocation mUserLocation;
+
+    //widgets
+    private EditText mSearchText;
+    private ImageView mGps;
+
+    //vars
+    private Boolean mLocationPermissionsGranted = false;
+    private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
@@ -75,25 +95,6 @@ public class MapsActivity extends FragmentActivity
             init();
         }
     }
-
-    private static final String TAG = "MapActivity";
-
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 5f;
-
-    private FirebaseFirestore mDb;
-    private UserLocation mUserLocation;
-
-    //widgets
-    private EditText mSearchText;
-    private ImageView mGps;
-
-    //vars
-    private Boolean mLocationPermissionsGranted = false;
-    private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -158,8 +159,6 @@ public class MapsActivity extends FragmentActivity
                     address.getAddressLine(0));
         }
     }
-
-    Location currentLocation;
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -271,7 +270,9 @@ public class MapsActivity extends FragmentActivity
         String museum = "museum";
         Object transferData[] = new Object[2];
         NearbyPlaces getNearbyPlaces = new NearbyPlaces();
-        double latitude = currentLocation.getLatitude(), longitude = currentLocation.getLongitude();
+        double latitude, longitude;
+        latitude = currentLocation.getLatitude();
+        longitude = currentLocation.getLongitude();
 
         switch (v.getId()) {
             case R.id.museumsNearby:

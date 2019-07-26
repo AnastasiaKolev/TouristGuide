@@ -27,8 +27,10 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity {
 
     private final String TAG = "ProfileActivity";
+    public static final String EXTRA_MESSAGE = "com.example.myfisrtandroidapp.MESSAGE";
 
     private FirebaseFirestore mDb;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void backButton(View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, user.getUsername());
         startActivity(intent);
     }
 
@@ -73,19 +76,23 @@ public class ProfileActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: successfully set the user client.");
-                    User user = task.getResult().toObject(User.class);
+                    user = task.getResult().toObject(User.class);
                     ((UserClient)getApplicationContext()).getUser();
-                    TextView mUserName = findViewById(R.id.nameDetails);
-                    TextView mEmail = findViewById(R.id.emailDetails);
-                    TextView mMainName = findViewById(R.id.nameMain);
-                    TextView mMainEmail = findViewById(R.id.emailMain);
-                    mUserName.setText(user.getUsername());
-                    mMainName.setText(user.getUsername());
-                    mEmail.setText(user.getEmail());
-                    mMainEmail.setText(user.getEmail());
+                    setUserProfile(user);
                 }
             }
         });
+    }
+
+    private void setUserProfile(User user) {
+        TextView mUserName = findViewById(R.id.nameDetails);
+        TextView mEmail = findViewById(R.id.emailDetails);
+        TextView mMainName = findViewById(R.id.nameMain);
+        TextView mMainEmail = findViewById(R.id.emailMain);
+        mUserName.setText(user.getUsername());
+        mMainName.setText(user.getUsername());
+        mEmail.setText(user.getEmail());
+        mMainEmail.setText(user.getEmail());
     }
 
     @Override
