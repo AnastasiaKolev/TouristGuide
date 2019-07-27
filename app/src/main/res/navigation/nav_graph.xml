@@ -48,7 +48,11 @@
         android:id="@+id/registerActivity"
         android:name="com.example.myfisrtandroidapp.ui.RegisterActivity"
         android:label="activity_register"
-        tools:layout="@layout/activity_register" />
+        tools:layout="@layout/activity_register" >
+        <action
+            android:id="@+id/action_registerActivity_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </dialog>
     <dialog
         android:id="@+id/userPlacesActivity"
         android:name="com.example.myfisrtandroidapp.UserPlacesActivity"

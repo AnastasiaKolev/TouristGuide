@@ -310,6 +310,7 @@ public class MapsActivity extends FragmentActivity
     public void dialogInfo(final Marker marker) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(marker.getTitle());
+        //builder.setView()
         builder.setMessage(marker.getSnippet())
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

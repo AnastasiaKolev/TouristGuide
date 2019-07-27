@@ -2,6 +2,7 @@ package com.example.myfisrtandroidapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,9 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.TextViewCompat;
 
-import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserPreferences;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,77 +21,66 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-
 public class ProfileActivity extends AppCompatActivity {
 
     private final String TAG = "ProfileActivity";
     public static final String EXTRA_MESSAGE = "com.example.myfisrtandroidapp.MESSAGE";
 
     private FirebaseFirestore mDb;
-    private User user;
+    private UserPreferences mUserPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        UserPreferences userPreferences = UserPreferences.getInstance();
-        ArrayList<String> all = userPreferences.getPreferences();
-
-        TextView mPlacesLists = findViewById(R.id.prefDetails);;
-        StringBuilder allPref = new StringBuilder();
-        Log.d(TAG, "dgkkbfdgskb" + all);
-
-        for (String s : all) {
-            if (allPref.length() > 0) {
-                allPref.append(", ");
-            }
-            allPref.append(s);
-        }
-
-        Log.d(TAG, "0000000" + allPref.toString());
-        mPlacesLists.setText(allPref.toString());
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(mPlacesLists, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-
         mDb = FirebaseFirestore.getInstance();
-        getUserDetails();
+        getUserPrefDetails();
     }
 
     public void backButton(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, user.getUsername());
+        intent.putExtra(EXTRA_MESSAGE, mUserPreferences.getUser().getUsername());
         startActivity(intent);
     }
 
-    private void getUserDetails() {
-        DocumentReference userRef = mDb.collection(getString(R.string.collection_users))
+    private void getUserPrefDetails() {
+        DocumentReference preferencesRef = mDb.collection(getString(R.string.collection_user_preferences))
                 .document(FirebaseAuth.getInstance().getUid());
 
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        preferencesRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: successfully set the user client.");
-                    user = task.getResult().toObject(User.class);
-                    ((UserClient)getApplicationContext()).getUser();
-                    setUserProfile(user);
+                    mUserPreferences = task.getResult().toObject(UserPreferences.class);
+                    mUserPreferences.getUser();
+                    mUserPreferences.getPreferences();
+                    setUserProfile(mUserPreferences);
                 }
             }
         });
     }
 
-    private void setUserProfile(User user) {
+    private void setUserProfile(UserPreferences userPreferences) {
         TextView mUserName = findViewById(R.id.nameDetails);
+        mUserName.setText(userPreferences.getUser().getUsername());
+
         TextView mEmail = findViewById(R.id.emailDetails);
+        mEmail.setText(userPreferences.getUser().getEmail());
+
         TextView mMainName = findViewById(R.id.nameMain);
+        mMainName.setText(userPreferences.getUser().getUsername());
+
         TextView mMainEmail = findViewById(R.id.emailMain);
-        mUserName.setText(user.getUsername());
-        mMainName.setText(user.getUsername());
-        mEmail.setText(user.getEmail());
-        mMainEmail.setText(user.getEmail());
+        mMainEmail.setText(userPreferences.getUser().getEmail());
+
+        TextView mPlacesLists = findViewById(R.id.prefDetails);
+        String preferences = TextUtils.join(", ", userPreferences.getPreferences());
+        mPlacesLists.setText(preferences);
     }
 
     @Override

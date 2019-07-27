@@ -6,27 +6,41 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserPreferences;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UserPlacesActivity extends FragmentActivity {
+public class UserPlacesActivity extends AppCompatActivity {
     private final String TAG = "Chips Example";
     private HashMap<String, Boolean> mPreferences = new HashMap<>();
     private ArrayList<String> aPreferences = new ArrayList<>();
     private Set<String> setPref = new HashSet<>();
 
+    private UserPreferences mUserPreferences;
+    private FirebaseFirestore mDb;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
+
+        mDb = FirebaseFirestore.getInstance();
 
         mPreferences.put("museum", true);
         mPreferences.put("church", false);
@@ -42,15 +56,12 @@ public class UserPlacesActivity extends FragmentActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, buttonView.getId() + "");
                 if (museum_chip.isChecked()) {
-                    mPreferences.replace("museum", true);
                     setPref.add("museum");
                 }
                 if (church_chip.isChecked()) {
-                    mPreferences.replace("church", true);
                     setPref.add("church");
                 }
                 if (art_gallery_chip.isChecked()) {
-                    mPreferences.replace("art_gallery", true);
                     setPref.add("art_gallery");
                 }
             }
@@ -63,18 +74,55 @@ public class UserPlacesActivity extends FragmentActivity {
     }
 
     public void savePlaces(View view) {
-        UserPreferences userPreferences = UserPreferences.getInstance();
-        setPref = mPreferences.keySet();
+        if (mUserPreferences == null) {
+            mUserPreferences = new UserPreferences();
+            //UserPreferences userPreferences = UserPreferences.getInstance();
+            setPref = mPreferences.keySet();
 
-        for (String s : setPref) {
-            aPreferences.add(s);
+            for (String s : setPref) {
+                aPreferences.add(s);
+            }
+//
+//            userPreferences.setPreferences(aPreferences);
+            Log.d(TAG, "Preferences LIST: " + aPreferences.toString());
+
+            DocumentReference userRef = mDb.collection(getString(R.string.collection_users))
+                    .document(FirebaseAuth.getInstance().getUid());
+
+            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        Log.d(TAG, "onComplete: successfully set the user client.");
+                        User user = task.getResult().toObject(User.class);
+                        mUserPreferences.setUser(user);
+                        mUserPreferences.setPreferences(aPreferences);
+                        saveUserPreferences();
+                    }
+                }
+            });
         }
-
-        userPreferences.setPreferences(aPreferences);
-        Log.d(TAG,"Preferences LIST: "  + userPreferences.getPreferences().toString());
 
         Intent intent = new Intent(this, ProfileActivity.class);
 
         startActivity(intent);
+    }
+
+    private void saveUserPreferences(){
+        if(mUserPreferences != null){
+            DocumentReference preferencesRef = mDb
+                    .collection(getString(R.string.collection_user_preferences))
+                    .document(FirebaseAuth.getInstance().getUid());
+
+            preferencesRef.set(mUserPreferences).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Log.d(TAG, "saveUserPreferences: \ninserted user preferences into database." +
+                                aPreferences.toString());
+                    }
+                }
+            });
+        }
     }
 }
