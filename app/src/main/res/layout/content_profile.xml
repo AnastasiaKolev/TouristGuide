@@ -18,7 +18,7 @@
         <TextView
             style="@style/headerText"
             android:text="Account Info"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="5dp"/>
 
         <RelativeLayout style="@style/profileDetailsLayout">
 
@@ -32,6 +32,14 @@
                 android:text="developer"
                 android:layout_toEndOf="@id/nameTextView"
                 style="@style/profileDetailsMiniText" />
+
+            <ImageView
+                android:id="@+id/editName"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_edit" />
 
         </RelativeLayout>
 
@@ -50,6 +58,14 @@
                 android:layout_toEndOf="@id/emailTextView"
                 style="@style/profileDetailsMiniText" />
 
+            <ImageView
+                android:id="@+id/editEmail"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_edit" />
+
         </RelativeLayout>
 
         <View style="@style/proifleDetailsView" />
@@ -67,6 +83,14 @@
                 android:layout_toRightOf="@id/prefTextView"
                 android:autoSizeTextType="uniform"
                 android:text="@string/museum" />
+
+            <ImageView
+                android:id="@+id/editPreferences"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_edit" />
 
         </RelativeLayout>
 

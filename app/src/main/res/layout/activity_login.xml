@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/login_form"
@@ -45,8 +44,7 @@
                 android:hint="@string/password"
                 android:layout_marginTop="20dp"
                 android:inputType="textPassword"
-                android:maxLines="1"
-                />
+                android:maxLines="1"/>
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -75,11 +73,8 @@
                     android:textColor="@color/linkBlue"
                     android:layout_centerHorizontal="true"/>
 
-
             </RelativeLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
     <ProgressBar
