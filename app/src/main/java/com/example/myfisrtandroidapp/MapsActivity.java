@@ -26,6 +26,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.myfisrtandroidapp.models.User;
+import com.example.myfisrtandroidapp.models.UserLocation;
 import com.example.myfisrtandroidapp.models.UserPreferences;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,6 +46,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
@@ -68,6 +71,8 @@ public class MapsActivity extends FragmentActivity
 
     private FirebaseFirestore mDb;
     private UserPreferences mUserPreferences;
+    private UserLocation mUserLocation;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     //widgets
     private EditText mSearchText;
@@ -106,9 +111,11 @@ public class MapsActivity extends FragmentActivity
         mSearchText = findViewById(R.id.input_search);
         mGps = findViewById(R.id.ic_gps);
 
-        getLocationPermission();
 
         mDb = FirebaseFirestore.getInstance();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        getLocationPermission();
         getUserPrefDetails();
     }
 
@@ -229,6 +236,71 @@ public class MapsActivity extends FragmentActivity
         hideSoftKeyboard();
     }
 
+    private void getUserDetails(){
+        if(mUserLocation == null){
+            mUserLocation = new UserLocation();
+            DocumentReference userRef = mDb.collection(getString(R.string.collection_users))
+                    .document(FirebaseAuth.getInstance().getUid());
+
+            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        Log.d(TAG, "onComplete: successfully set the user client.");
+                        User user = task.getResult().toObject(User.class);
+                        mUserLocation.setUser(user);
+                        getLastKnownLocation();
+                    }
+                }
+            });
+        }
+        else{
+            getLastKnownLocation();
+        }
+    }
+
+    private void getLastKnownLocation() {
+        Log.d(TAG, "getLastKnownLocation: called.");
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<android.location.Location>() {
+            @Override
+            public void onComplete(@NonNull Task<android.location.Location> task) {
+                if (task.isSuccessful()) {
+                    Location location = task.getResult();
+                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                    mUserLocation.setGeo_point(geoPoint);
+                    mUserLocation.setTimestamp(null);
+                    saveUserLocation();
+                }
+            }
+        });
+
+    }
+
+    private void saveUserLocation(){
+
+        if(mUserLocation != null){
+            DocumentReference locationRef = mDb
+                    .collection(getString(R.string.collection_user_locations))
+                    .document(FirebaseAuth.getInstance().getUid());
+
+            locationRef.set(mUserLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Log.d(TAG, "saveUserLocation: \ninserted user location into database." +
+                                "\n latitude: " + mUserLocation.getGeo_point().getLatitude() +
+                                "\n longitude: " + mUserLocation.getGeo_point().getLongitude());
+                    }
+                }
+            });
+        }
+    }
+
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -247,6 +319,7 @@ public class MapsActivity extends FragmentActivity
                     COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionsGranted = true;
                 initMap();
+                getUserDetails();
             }else{
                 ActivityCompat.requestPermissions(this,
                         permissions,
@@ -435,7 +508,7 @@ public class MapsActivity extends FragmentActivity
         title.setText(marker.getTitle());
 
         final TextView snippet = layout.findViewById(R.id.mySnippet);
-        snippet.setText(marker.getSnippet() + "\nDetermine route to " + marker.getTitle() + "?");
+        snippet.setText(marker.getSnippet() + "\n\nDetermine route to " + marker.getTitle() + "?");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle(marker.getTitle());

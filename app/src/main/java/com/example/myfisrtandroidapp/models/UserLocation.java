@@ -12,25 +12,14 @@ public class UserLocation {
     private GeoPoint geo_point;
     private @ServerTimestamp Date timestamp;
 
-    private UserPreferences preferences;
-
-    public UserLocation(User user, GeoPoint geo_point, Date timestamp, UserPreferences userPreferences) {
+    public UserLocation(User user, GeoPoint geo_point, Date timestamp) {
         this.user = user;
         this.geo_point = geo_point;
         this.timestamp = timestamp;
-        this.preferences = userPreferences;
     }
 
     public UserLocation() {
 
-    }
-
-    public UserPreferences getPreferences() {
-        return preferences;
-    }
-
-    public void setPreferences(UserPreferences preferences) {
-        this.preferences = preferences;
     }
 
     public User getUser() {
