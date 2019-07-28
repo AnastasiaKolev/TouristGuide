@@ -1,4 +1,4 @@
-package com.example.myfisrtandroidapp;
+package com.example.myfisrtandroidapp.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

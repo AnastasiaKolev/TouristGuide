@@ -22,11 +22,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" >
+        <activity android:name=".ui.MainActivity" >
         </activity>
-        <activity android:name=".UserPlacesActivity" >
+        <activity android:name=".ui.UserPlacesActivity" >
         </activity>
-        <activity android:name=".ProfileActivity" >
+        <activity android:name=".ui.ProfileActivity" >
         </activity>
         <activity android:name=".ui.EditNameActivity" >
         </activity>
@@ -47,7 +47,7 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <activity
-            android:name=".MapsActivity"
+            android:name=".ui.MapsActivity"
             android:label="@string/title_activity_maps"
             android:noHistory="true" >
         </activity>

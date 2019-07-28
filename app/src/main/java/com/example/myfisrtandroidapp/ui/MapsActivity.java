@@ -1,4 +1,4 @@
-package com.example.myfisrtandroidapp;
+package com.example.myfisrtandroidapp.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -26,6 +26,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.myfisrtandroidapp.utils.NearbyPlaces;
+import com.example.myfisrtandroidapp.R;
 import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserLocation;
 import com.example.myfisrtandroidapp.models.UserPreferences;

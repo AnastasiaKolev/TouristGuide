@@ -7,7 +7,7 @@
 
     <dialog
         android:id="@+id/mainActivity"
-        android:name="com.example.myfisrtandroidapp.MainActivity"
+        android:name="com.example.myfisrtandroidapp.ui.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main">
         <action
@@ -20,7 +20,7 @@
 
     <dialog
         android:id="@+id/profileActivity"
-        android:name="com.example.myfisrtandroidapp.ProfileActivity"
+        android:name="com.example.myfisrtandroidapp.ui.ProfileActivity"
         android:label="profileActivity"
         tools:layout="@layout/activity_profile">
             <activity
@@ -55,12 +55,12 @@
     </dialog>
     <dialog
         android:id="@+id/userPlacesActivity"
-        android:name="com.example.myfisrtandroidapp.UserPlacesActivity"
+        android:name="com.example.myfisrtandroidapp.ui.UserPlacesActivity"
         android:label="activity_places"
         tools:layout="@layout/activity_places" />
     <dialog
         android:id="@+id/mapsActivity"
-        android:name="com.example.myfisrtandroidapp.MapsActivity"
+        android:name="com.example.myfisrtandroidapp.ui.MapsActivity"
         android:label="activity_maps"
         tools:layout="@layout/activity_maps" />
 

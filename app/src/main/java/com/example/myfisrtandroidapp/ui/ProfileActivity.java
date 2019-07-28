@@ -1,4 +1,4 @@
-package com.example.myfisrtandroidapp;
+package com.example.myfisrtandroidapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.myfisrtandroidapp.R;
+import com.example.myfisrtandroidapp.UserClient;
 import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserPreferences;
-import com.example.myfisrtandroidapp.ui.EditNameActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

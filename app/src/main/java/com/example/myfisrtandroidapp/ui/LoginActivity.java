@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.myfisrtandroidapp.MainActivity;
 import com.example.myfisrtandroidapp.R;
 import com.example.myfisrtandroidapp.UserClient;
 import com.example.myfisrtandroidapp.models.User;

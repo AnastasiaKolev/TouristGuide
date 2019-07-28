@@ -1,4 +1,4 @@
-package com.example.myfisrtandroidapp;
+package com.example.myfisrtandroidapp.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.myfisrtandroidapp.ui.LoginActivity;
+import com.example.myfisrtandroidapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;

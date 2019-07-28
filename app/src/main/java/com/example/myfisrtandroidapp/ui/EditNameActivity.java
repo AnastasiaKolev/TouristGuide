@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myfisrtandroidapp.ProfileActivity;
 import com.example.myfisrtandroidapp.R;
 import com.example.myfisrtandroidapp.UserClient;
 import com.example.myfisrtandroidapp.models.User;

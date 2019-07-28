@@ -1,4 +1,4 @@
-package com.example.myfisrtandroidapp;
+package com.example.myfisrtandroidapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,11 @@ import android.widget.CompoundButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myfisrtandroidapp.R;
+import com.example.myfisrtandroidapp.UserClient;
 import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserPreferences;
+import com.example.myfisrtandroidapp.ui.ProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
