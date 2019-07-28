@@ -32,6 +32,16 @@ public class UserPlacesActivity extends AppCompatActivity {
     private UserPreferences mUserPreferences;
     private FirebaseFirestore mDb;
 
+    Chip museum_chip;
+    Chip church_chip;
+    Chip art_gallery_chip;
+    Chip aquarium_chip;
+    Chip zoo_chip;
+    Chip amusement_park_chip;
+    Chip city_hall_chip;
+    Chip mosque_chip;
+    Chip park_chip;
+    Chip synagogue_chip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +52,18 @@ public class UserPlacesActivity extends AppCompatActivity {
 
         /*Filter Chip section*/
         ChipGroup filterChipGroup = findViewById(R.id.filter_chip_group);
-        Chip museum_chip = findViewById(R.id.museum_chip);
-        Chip church_chip = findViewById(R.id.church_chip);
-        Chip art_gallery_chip = findViewById(R.id.art_gallery_chip);
-        Chip aquarium_chip = findViewById(R.id.aquarium_chip);
-        Chip zoo_chip = findViewById(R.id.zoo_chip);
-        Chip amusement_park_chip = findViewById(R.id.amusement_park_chip);
-        Chip city_hall_chip = findViewById(R.id.city_hall_chip);
-        Chip mosque_chip = findViewById(R.id.mosque_chip);
-        Chip park_chip = findViewById(R.id.park_chip);
-        Chip synagogue_chip = findViewById(R.id.synagogue_chip);
+        museum_chip = findViewById(R.id.museum_chip);
+        church_chip = findViewById(R.id.church_chip);
+        art_gallery_chip = findViewById(R.id.art_gallery_chip);
+        aquarium_chip = findViewById(R.id.aquarium_chip);
+        zoo_chip = findViewById(R.id.zoo_chip);
+        amusement_park_chip = findViewById(R.id.amusement_park_chip);
+        city_hall_chip = findViewById(R.id.city_hall_chip);
+        mosque_chip = findViewById(R.id.mosque_chip);
+        park_chip = findViewById(R.id.park_chip);
+        synagogue_chip = findViewById(R.id.synagogue_chip);
+
+        getUserPrefDetails();
 
         CompoundButton.OnCheckedChangeListener filterChipListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -59,33 +71,53 @@ public class UserPlacesActivity extends AppCompatActivity {
                 Log.i(TAG, buttonView.getId() + "");
                 if (museum_chip.isChecked()) {
                     setPref.add("museum");
+                } else {
+                    setPref.remove("museum");
                 }
                 if (church_chip.isChecked()) {
                     setPref.add("church");
+                } else {
+                    setPref.remove("church");
                 }
                 if (art_gallery_chip.isChecked()) {
                     setPref.add("art_gallery");
+                } else {
+                    setPref.remove("art_gallery");
                 }
                 if (aquarium_chip.isChecked()) {
-                    setPref.add("aquarium_chip");
+                    setPref.add("aquarium");
+                } else {
+                    setPref.remove("aquarium");
                 }
                 if (zoo_chip.isChecked()) {
-                    setPref.add("zoo_chip");
+                    setPref.add("zoo");
+                } else {
+                    setPref.remove("zoo");
                 }
                 if (amusement_park_chip.isChecked()) {
-                    setPref.add("amusement_park_chip");
+                    setPref.add("amusement_park");
+                } else {
+                    setPref.remove("amusement_park");
                 }
                 if (city_hall_chip.isChecked()) {
-                    setPref.add("city_hall_chip");
+                    setPref.add("city_hall");
+                } else {
+                    setPref.remove("city_hall");
                 }
                 if (mosque_chip.isChecked()) {
-                    setPref.add("mosque_chip");
+                    setPref.add("mosque");
+                } else {
+                    setPref.remove("mosque");
                 }
                 if (park_chip.isChecked()) {
-                    setPref.add("park_chip");
+                    setPref.add("park");
+                } else {
+                    setPref.remove("park");
                 }
                 if (synagogue_chip.isChecked()) {
-                    setPref.add("synagogue_chip");
+                    setPref.add("synagogue");
+                } else {
+                    setPref.remove("synagogue");
                 }
             }
         };
@@ -100,43 +132,110 @@ public class UserPlacesActivity extends AppCompatActivity {
         mosque_chip.setOnCheckedChangeListener(filterChipListener);
         park_chip.setOnCheckedChangeListener(filterChipListener);
         synagogue_chip.setOnCheckedChangeListener(filterChipListener);
-
-        museum_chip.setChecked(true);
     }
 
-    public void savePlaces(View view) {
-        if (mUserPreferences == null) {
-            mUserPreferences = new UserPreferences();
-
-            for (String s : setPref) {
-                aPreferences.add(s);
-            }
-
-            Log.d(TAG, "Preferences LIST: " + aPreferences.toString());
-
-            DocumentReference userRef = mDb.collection(getString(R.string.collection_users))
+    private void getUserPrefDetails() {
+//        DocumentReference preferencesRef = mDb.collection(getString(R.string.collection_user_preferences))
+//                .document(FirebaseAuth.getInstance().getUid());
+//        if (preferencesRef.get() == null) {
+//            museum_chip.setChecked(true);
+//            saveUserPreferences();
+//        } else {
+            DocumentReference preferencesRef = mDb.collection(getString(R.string.collection_user_preferences))
                     .document(FirebaseAuth.getInstance().getUid());
 
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            preferencesRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Log.d(TAG, "onComplete: successfully set the user client.");
-                        User user = task.getResult().toObject(User.class);
-                        mUserPreferences.setUser(user);
-                        mUserPreferences.setPreferences(aPreferences);
-                        saveUserPreferences();
+                        mUserPreferences = task.getResult().toObject(UserPreferences.class);
+                        mUserPreferences.getPreferences();
+                        if (mUserPreferences.getPreferences() == null) {
+                            museum_chip.setChecked(true);
+                            saveUserPreferences();
+                        } else {
+                        setUserPrefProfile(mUserPreferences);
+                        }
                     }
                 }
             });
+//        }
+    }
+
+    private void setUserPrefProfile(UserPreferences userPreferences) {
+//        if (mUserPreferences == null) {
+//            museum_chip.setChecked(true);
+//            setPref.add("museum");
+//        } else {
+            for (String s : userPreferences.getPreferences()) {
+                if (s.equals("museum")) {
+                    museum_chip.setChecked(true);
+                }
+                if (s.equals("church")) {
+                    church_chip.setChecked(true);
+                }
+                if (s.equals("art_gallery")) {
+                    art_gallery_chip.setChecked(true);
+                }
+                if (s.equals("aquarium")) {
+                    aquarium_chip.setChecked(true);
+                }
+                if (s.equals("zoo")) {
+                    zoo_chip.setChecked(true);
+                }
+                if (s.equals("amusement_park")) {
+                    amusement_park_chip.setChecked(true);
+                }
+                if (s.equals("city_hall")) {
+                    city_hall_chip.setChecked(true);
+                }
+                if (s.equals("mosque")) {
+                    mosque_chip.setChecked(true);
+                }
+                if (s.equals("park")) {
+                    park_chip.setChecked(true);
+                }
+                if (s.equals("synagogue")) {
+                    synagogue_chip.setChecked(true);
+                }
+            }
+//        }
+    }
+
+    public void savePlaces(View view) {
+        //if (mUserPreferences == null) {
+        mUserPreferences = new UserPreferences();
+
+        for (String s : setPref) {
+            aPreferences.add(s);
         }
+
+        Log.d(TAG, "Preferences LIST: " + aPreferences.toString());
+
+        DocumentReference userRef = mDb.collection(getString(R.string.collection_users))
+                .document(FirebaseAuth.getInstance().getUid());
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: successfully set the user client. + " + aPreferences);
+                    User user = ((UserClient) getApplicationContext()).getUser();
+                    mUserPreferences.setUser(user);
+                    mUserPreferences.setPreferences(aPreferences);
+                    saveUserPreferences();
+                }
+            }
+        });
+        //}
 
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
-    private void saveUserPreferences(){
-        if(mUserPreferences != null){
+    private void saveUserPreferences() {
+        if (mUserPreferences != null) {
             DocumentReference preferencesRef = mDb
                     .collection(getString(R.string.collection_user_preferences))
                     .document(FirebaseAuth.getInstance().getUid());
@@ -144,7 +243,7 @@ public class UserPlacesActivity extends AppCompatActivity {
             preferencesRef.set(mUserPreferences).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Log.d(TAG, "saveUserPreferences: \ninserted user preferences into database." +
                                 aPreferences.toString());
                     }

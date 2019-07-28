@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".ProfileActivity" >
         </activity>
+        <activity android:name=".ui.EditNameActivity" >
+        </activity>
         <activity android:name=".ui.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

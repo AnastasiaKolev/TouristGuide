@@ -13,13 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserPreferences;
+import com.example.myfisrtandroidapp.ui.EditNameActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -59,7 +63,17 @@ public class ProfileActivity extends AppCompatActivity {
                     mUserPreferences = task.getResult().toObject(UserPreferences.class);
                     mUserPreferences.getUser();
                     mUserPreferences.getPreferences();
-                    setUserProfile(mUserPreferences);
+                    if (mUserPreferences.getPreferences() == null) {
+                        ArrayList<String> aPreferences = new ArrayList<>();
+                        aPreferences.add("museum");
+                        mUserPreferences.setPreferences(aPreferences);
+                    } else {
+                        setUserProfile(mUserPreferences);
+                    }
+                    if (mUserPreferences.getUser() == null) {
+                        User user = ((UserClient) getApplicationContext()).getUser();
+                        mUserPreferences.setUser(user);
+                    }
                 }
             }
         });
@@ -79,7 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
         mMainEmail.setText(userPreferences.getUser().getEmail());
 
         TextView mPlacesLists = findViewById(R.id.prefDetails);
-        String preferences = TextUtils.join(", ", userPreferences.getPreferences());
+        String preferences = TextUtils.join("\n", userPreferences.getPreferences());
         mPlacesLists.setText(preferences);
     }
 
@@ -97,5 +111,15 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void editName (View view) {
+        Intent intent = new Intent(this, EditNameActivity.class);
+        startActivity(intent);
+    }
+
+    public void editPreferences (View view) {
+        Intent intent = new Intent(this, UserPlacesActivity.class);
+        startActivity(intent);
     }
 }

@@ -39,7 +39,8 @@
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                android:onClick="editName"/>
 
         </RelativeLayout>
 
@@ -64,7 +65,8 @@
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                android:onClick="editEmail"/>
 
         </RelativeLayout>
 
@@ -90,7 +92,8 @@
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                android:onClick="editPreferences"/>
 
         </RelativeLayout>
 

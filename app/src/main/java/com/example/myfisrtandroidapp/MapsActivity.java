@@ -26,7 +26,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.myfisrtandroidapp.models.UserLocation;
+import com.example.myfisrtandroidapp.models.UserPreferences;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,6 +40,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
@@ -64,7 +67,7 @@ public class MapsActivity extends FragmentActivity
     private static final float DEFAULT_ZOOM = 15f;
 
     private FirebaseFirestore mDb;
-    private UserLocation mUserLocation;
+    private UserPreferences mUserPreferences;
 
     //widgets
     private EditText mSearchText;
@@ -104,6 +107,27 @@ public class MapsActivity extends FragmentActivity
         mGps = findViewById(R.id.ic_gps);
 
         getLocationPermission();
+
+        mDb = FirebaseFirestore.getInstance();
+        getUserPrefDetails();
+    }
+
+    private void getUserPrefDetails() {
+        DocumentReference preferencesRef = mDb.collection(getString(R.string.collection_user_preferences))
+                .document(FirebaseAuth.getInstance().getUid());
+
+        preferencesRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: successfully set the user client.");
+                    mUserPreferences = task.getResult().toObject(UserPreferences.class);
+                    mUserPreferences.getUser();
+                    mUserPreferences.getPreferences();
+                    //setUserProfile(mUserPreferences);
+                }
+            }
+        });
     }
 
     private void init(){
@@ -264,12 +288,46 @@ public class MapsActivity extends FragmentActivity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private int ProximityRadius = 2000;
+    private int ProximityRadius = 10000;
 
     public void onMuseumClick(View v) {
-        String museum = "museum";
+        String museum = "museum", church, art_gallery, aquarium, zoo, amusement_park, city_hall, mosque, park, synagogue;
         Object transferData[] = new Object[2];
         NearbyPlaces getNearbyPlaces = new NearbyPlaces();
+
+        for (String s : mUserPreferences.getPreferences()) {
+            if (s.equals("museum")) {
+                museum = "museum";
+            }
+            if (s.equals("church")) {
+                church = "church";
+            }
+            if (s.equals("art_gallery")) {
+                art_gallery = "art_gallery";
+            }
+            if (s.equals("aquarium")) {
+                aquarium = "aquarium";
+            }
+            if (s.equals("zoo")) {
+                zoo = "zoo";
+            }
+            if (s.equals("amusement_park")) {
+                amusement_park = "amusement_park";
+            }
+            if (s.equals("city_hall")) {
+                city_hall = "city_hall";
+            }
+            if (s.equals("mosque")) {
+                mosque = "mosque";
+            }
+            if (s.equals("park")) {
+                park = "park";
+            }
+            if (s.equals("synagogue")) {
+                synagogue = "synagogue";
+            }
+        }
+
         double latitude, longitude;
         latitude = currentLocation.getLatitude();
         longitude = currentLocation.getLongitude();

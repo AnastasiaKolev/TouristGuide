@@ -30,8 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import static android.text.TextUtils.isEmpty;
 
 public class LoginActivity extends FragmentActivity implements
-        View.OnClickListener
-{
+        View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
     public static final String EXTRA_MESSAGE = "com.example.myfisrtandroidapp.MESSAGE";
@@ -59,23 +58,23 @@ public class LoginActivity extends FragmentActivity implements
         hideSoftKeyboard();
     }
 
-    private void showDialog(){
+    private void showDialog() {
         mProgressBar.setVisibility(View.VISIBLE);
 
     }
 
-    private void hideDialog(){
-        if(mProgressBar.getVisibility() == View.VISIBLE){
+    private void hideDialog() {
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
             mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void hideSoftKeyboard(){
+    private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     /* Firebase setup */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: started.");
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -96,10 +95,10 @@ public class LoginActivity extends FragmentActivity implements
                     userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: successfully set the user client.");
                                 user = task.getResult().toObject(User.class);
-                                ((UserClient)(getApplicationContext())).setUser(user);
+                                ((UserClient) (getApplicationContext())).setUser(user);
                             }
                         }
                     });
@@ -132,10 +131,10 @@ public class LoginActivity extends FragmentActivity implements
         }
     }
 
-    private void signIn(){
+    private void signIn() {
         //check if the fields are filled out
-        if(!isEmpty(mEmail.getText().toString())
-                && !isEmpty(mPassword.getText().toString())){
+        if (!isEmpty(mEmail.getText().toString())
+                && !isEmpty(mPassword.getText().toString())) {
             Log.d(TAG, "onClick: attempting to authenticate.");
 
             showDialog();
@@ -155,21 +154,21 @@ public class LoginActivity extends FragmentActivity implements
                     hideDialog();
                 }
             });
-        }else{
+        } else {
             Toast.makeText(LoginActivity.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.link_register:{
+        switch (view.getId()) {
+            case R.id.link_register: {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
             }
 
-            case R.id.email_sign_in_button:{
+            case R.id.email_sign_in_button: {
                 signIn();
                 break;
             }
