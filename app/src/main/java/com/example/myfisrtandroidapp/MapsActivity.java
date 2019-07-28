@@ -429,10 +429,19 @@ public class MapsActivity extends FragmentActivity
     }
 
     public void dialogInfo(final Marker marker) {
+        final View layout = View.inflate(this, R.layout.activity_dialog, null);
+
+        final TextView title = layout.findViewById(R.id.myTitle);
+        title.setText(marker.getTitle());
+
+        final TextView snippet = layout.findViewById(R.id.mySnippet);
+        snippet.setText(marker.getSnippet() + "\nDetermine route to " + marker.getTitle() + "?");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(marker.getTitle());
-        //builder.setView()
-        builder.setMessage(marker.getSnippet())
+        //builder.setTitle(marker.getTitle());
+        builder.setView(layout);
+        //builder.setTitle(marker.getTitle());
+        builder.setMessage("")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override

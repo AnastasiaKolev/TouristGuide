@@ -22,6 +22,7 @@ public class DataParser {
         String open_now = "";
         ArrayList<String> types = new ArrayList<>();
         String types_string = "";
+        String rating = "";
 
         try
         {
@@ -37,6 +38,10 @@ public class DataParser {
             {
                 Boolean open = googlePlaceJSON.getJSONObject("opening_hours").getBoolean("open_now");
                 open_now = open.toString();
+            }
+            if (!googlePlaceJSON.isNull("rating"))
+            {
+                rating = googlePlaceJSON.getString("rating");
             }
             latitude = googlePlaceJSON.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJSON.getJSONObject("geometry").getJSONObject("location").getString("lng");
@@ -54,6 +59,7 @@ public class DataParser {
             googlePlaceMap.put("open_now", open_now);
             googlePlaceMap.put("reference", reference);
             googlePlaceMap.put("types", types_string);
+            googlePlaceMap.put("rating", rating);
         }
         catch (JSONException e)
         {

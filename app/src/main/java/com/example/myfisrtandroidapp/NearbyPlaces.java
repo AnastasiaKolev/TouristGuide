@@ -60,16 +60,23 @@ public class NearbyPlaces extends AsyncTask<Object, String, String> {
             String open_hours = googleNearbyPlace.get("open_now");
             String types_string = googleNearbyPlace.get("types");
             String[] types = types_string.split(",");
+            String rating = googleNearbyPlace.get("rating");
             double lat = Double.parseDouble(googleNearbyPlace.get("lat"));
             double lng = Double.parseDouble(googleNearbyPlace.get("lng"));
 
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
+            //if (open_hours.equals("true")) {
+                markerOptions.title(nameOfPlace);
+            //} else {
+                //markerOptions.title(nameOfPlace + "\n" + vicinity + "\nRating: " + rating);
+            //}
+            //markerOptions.snippet("Determine route to " + nameOfPlace + "?");
             if (open_hours.equals("true")) {
-                markerOptions.title(nameOfPlace + "\n" + vicinity + "\nOpen now");
+                markerOptions.snippet(vicinity + "\n\nOpen now!\n" + rating);
+            } else {
+                markerOptions.snippet(vicinity + "\n" + rating);
             }
-            markerOptions.title(nameOfPlace + "\n" + vicinity);
-            markerOptions.snippet("Determine route to " + nameOfPlace + "?");
 
             float color = BitmapDescriptorFactory.HUE_GREEN;
 
@@ -124,7 +131,7 @@ public class NearbyPlaces extends AsyncTask<Object, String, String> {
 
             mMap.addMarker(markerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
         }
     }
 
