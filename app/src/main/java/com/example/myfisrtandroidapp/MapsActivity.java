@@ -124,7 +124,6 @@ public class MapsActivity extends FragmentActivity
                     mUserPreferences = task.getResult().toObject(UserPreferences.class);
                     mUserPreferences.getUser();
                     mUserPreferences.getPreferences();
-                    //setUserProfile(mUserPreferences);
                 }
             }
         });
@@ -288,60 +287,124 @@ public class MapsActivity extends FragmentActivity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private int ProximityRadius = 10000;
+    private int ProximityRadius = 2000;
 
     public void onMuseumClick(View v) {
-        String museum = "museum", church, art_gallery, aquarium, zoo, amusement_park, city_hall, mosque, park, synagogue;
+        String museum = "museum", church = "church", art_gallery = "art_gallery";
+        String aquarium = "aquarium", zoo = "zoo", amusement_park = "amusement_park";
+        String city_hall = "city_hall", mosque = "mosque", park = "park", synagogue = "synagogue";
         Object transferData[] = new Object[2];
         NearbyPlaces getNearbyPlaces = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces1 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces2 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces3 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces4 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces5 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces6 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces7 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces8 = new NearbyPlaces();
+        NearbyPlaces getNearbyPlaces9 = new NearbyPlaces();
 
-        for (String s : mUserPreferences.getPreferences()) {
-            if (s.equals("museum")) {
-                museum = "museum";
-            }
-            if (s.equals("church")) {
-                church = "church";
-            }
-            if (s.equals("art_gallery")) {
-                art_gallery = "art_gallery";
-            }
-            if (s.equals("aquarium")) {
-                aquarium = "aquarium";
-            }
-            if (s.equals("zoo")) {
-                zoo = "zoo";
-            }
-            if (s.equals("amusement_park")) {
-                amusement_park = "amusement_park";
-            }
-            if (s.equals("city_hall")) {
-                city_hall = "city_hall";
-            }
-            if (s.equals("mosque")) {
-                mosque = "mosque";
-            }
-            if (s.equals("park")) {
-                park = "park";
-            }
-            if (s.equals("synagogue")) {
-                synagogue = "synagogue";
-            }
-        }
 
-        double latitude, longitude;
-        latitude = currentLocation.getLatitude();
-        longitude = currentLocation.getLongitude();
+        double latitude = 59.934280199999996, longitude = 30.335098600000002;
+        /*latitude = currentLocation.getLatitude();
+        longitude = currentLocation.getLongitude();*/
 
         switch (v.getId()) {
             case R.id.museumsNearby:
                 mMap.clear();
-                String url = getUrl(latitude, longitude, museum);
-                transferData[0] = mMap;
-                transferData[1] = url;
+                for (String s : mUserPreferences.getPreferences()) {
+                    if (s.equals("museum")) {
+                        String url = getUrl(latitude, longitude, museum);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
 
-                getNearbyPlaces.execute(transferData);
-                Toast.makeText(this, "Searching for Nearby Museums...", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "Showing Nearby Museums...", Toast.LENGTH_SHORT).show();
+                        getNearbyPlaces.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Museums...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Museums...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("church")) {
+                        String url = getUrl(latitude, longitude, church);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces2.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Churches...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Churches...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("art_gallery")) {
+                        String url = getUrl(latitude, longitude, art_gallery);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces3.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Art Gallery...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Art Gallery...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("aquarium")) {
+                        String url = getUrl(latitude, longitude, aquarium);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces4.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Aquarium...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Aquarium...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("zoo")) {
+                        String url = getUrl(latitude, longitude, zoo);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces5.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Zoo...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Zoo...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("amusement_park")) {
+                        String url = getUrl(latitude, longitude, amusement_park);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces6.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Amusement park...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Amusement park...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("city_hall")) {
+                        String url = getUrl(latitude, longitude, city_hall);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces7.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby City Hall...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby City Hall...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("mosque")) {
+                        String url = getUrl(latitude, longitude, mosque);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces8.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Mosque...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Mosque...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("park")) {
+                        String url = getUrl(latitude, longitude, park);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces1.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Parks...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Parks...", Toast.LENGTH_SHORT).show();
+                    }
+                    if (s.equals("synagogue")) {
+                        String url = getUrl(latitude, longitude, synagogue);
+                        transferData[0] = mMap;
+                        transferData[1] = url;
+
+                        getNearbyPlaces9.execute(transferData);
+                        Toast.makeText(this, "Searching for Nearby Synagogue...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Showing Nearby Synagogue...", Toast.LENGTH_SHORT).show();
+                    }
+                }
                 break;
         }
 

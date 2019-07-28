@@ -58,9 +58,10 @@ public class NearbyPlaces extends AsyncTask<Object, String, String> {
             String nameOfPlace = googleNearbyPlace.get("place_name");
             String vicinity = googleNearbyPlace.get("vicinity");
             String open_hours = googleNearbyPlace.get("open_now");
+            String types_string = googleNearbyPlace.get("types");
+            String[] types = types_string.split(",");
             double lat = Double.parseDouble(googleNearbyPlace.get("lat"));
             double lng = Double.parseDouble(googleNearbyPlace.get("lng"));
-
 
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
@@ -69,10 +70,61 @@ public class NearbyPlaces extends AsyncTask<Object, String, String> {
             }
             markerOptions.title(nameOfPlace + "\n" + vicinity);
             markerOptions.snippet("Determine route to " + nameOfPlace + "?");
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+            float color = BitmapDescriptorFactory.HUE_GREEN;
+
+            for (int j = 0; j < types.length; j++) {
+                switch (types[j]) {
+                    case "church":
+                        color = BitmapDescriptorFactory.HUE_GREEN;
+                        j = types.length + 1;
+                        break;
+                    case "museum":
+                        color = BitmapDescriptorFactory.HUE_YELLOW;
+                        j = types.length + 1;
+                        break;
+                    case "art_gallery":
+                        color = BitmapDescriptorFactory.HUE_ORANGE;
+                        j = types.length + 1;
+                        break;
+                    case "aquarium":
+                        color = BitmapDescriptorFactory.HUE_BLUE;
+                        j = types.length + 1;
+                        break;
+                    case "zoo":
+                        color = BitmapDescriptorFactory.HUE_MAGENTA;
+                        j = types.length + 1;
+                        break;
+                    case "amusement_park":
+                        color = BitmapDescriptorFactory.HUE_ROSE;
+                        j = types.length + 1;
+                        break;
+                    case "city_hall":
+                        color = BitmapDescriptorFactory.HUE_VIOLET;
+                        j = types.length + 1;
+                        break;
+                    case "mosque":
+                        color = BitmapDescriptorFactory.HUE_AZURE;
+                        j = types.length + 1;
+                        break;
+                    case "park":
+                        color = BitmapDescriptorFactory.HUE_CYAN;
+                        j = types.length + 1;
+                        break;
+                    case "synagogue":
+                        color = BitmapDescriptorFactory.HUE_RED;
+                        j = types.length + 1;
+                        break;
+                    default:
+                        continue;
+                }
+            }
+
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(color));
+
             mMap.addMarker(markerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
         }
     }
 

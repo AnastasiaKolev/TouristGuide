@@ -1,5 +1,7 @@
 package com.example.myfisrtandroidapp;
 
+import android.text.TextUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,8 @@ public class DataParser {
         String longitude = "";
         String reference = "";
         String open_now = "";
+        ArrayList<String> types = new ArrayList<>();
+        String types_string = "";
 
         try
         {
@@ -37,7 +41,11 @@ public class DataParser {
             latitude = googlePlaceJSON.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJSON.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = googlePlaceJSON.getString("reference");
-
+            JSONArray tempTypes = googlePlaceJSON.getJSONArray("types");
+            for (int i = 0; i < tempTypes.length(); i++) {
+                types.add(tempTypes.getString(i));
+            }
+            types_string = TextUtils.join(",", types);
 
             googlePlaceMap.put("place_name", NameOfPlace);
             googlePlaceMap.put("vicinity", vicinity);
@@ -45,6 +53,7 @@ public class DataParser {
             googlePlaceMap.put("lng", longitude);
             googlePlaceMap.put("open_now", open_now);
             googlePlaceMap.put("reference", reference);
+            googlePlaceMap.put("types", types_string);
         }
         catch (JSONException e)
         {
