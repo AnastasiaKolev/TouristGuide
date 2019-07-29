@@ -66,17 +66,13 @@ public class NearbyPlaces extends AsyncTask<Object, String, String> {
 
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
-            //if (open_hours.equals("true")) {
-                markerOptions.title(nameOfPlace);
-            //} else {
-                //markerOptions.title(nameOfPlace + "\n" + vicinity + "\nRating: " + rating);
-            //}
-            //markerOptions.snippet("Determine route to " + nameOfPlace + "?");
+
             if (open_hours.equals("true")) {
-                markerOptions.snippet(vicinity + "\n\nOpen now!\n" + rating);
+                markerOptions.title(nameOfPlace + "\nOpen now!");
             } else {
-                markerOptions.snippet(vicinity + "\n" + rating);
+                markerOptions.title(nameOfPlace + "\n" + vicinity + "\n");
             }
+            markerOptions.snippet(rating);
 
             float color = BitmapDescriptorFactory.HUE_GREEN;
 

@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +27,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.myfisrtandroidapp.utils.NearbyPlaces;
 import com.example.myfisrtandroidapp.R;
+import com.example.myfisrtandroidapp.models.PolylineData;
 import com.example.myfisrtandroidapp.models.User;
 import com.example.myfisrtandroidapp.models.UserLocation;
 import com.example.myfisrtandroidapp.models.UserPreferences;
+import com.example.myfisrtandroidapp.utils.NearbyPlaces;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -61,7 +63,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapReadyCallback {
+        implements OnMapReadyCallback,
+        GoogleMap.OnPolylineClickListener {
 
     private static final String TAG = "MapActivity";
     private Location currentLocation;
@@ -75,6 +78,8 @@ public class MapsActivity extends FragmentActivity
     private UserPreferences mUserPreferences;
     private UserLocation mUserLocation;
     private FusedLocationProviderClient mFusedLocationClient;
+
+    private ArrayList<PolylineData> mPolyLinesData = new ArrayList<>();
 
     //widgets
     private EditText mSearchText;
@@ -104,6 +109,7 @@ public class MapsActivity extends FragmentActivity
 
             init();
         }
+        mMap.setOnPolylineClickListener(this);
     }
 
     @Override
@@ -138,16 +144,16 @@ public class MapsActivity extends FragmentActivity
         });
     }
 
-    private void init(){
+    private void init() {
         Log.d(TAG, "init: initializing");
 
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
 
                     //execute our method for searching
                     geoLocate();
@@ -168,20 +174,20 @@ public class MapsActivity extends FragmentActivity
         hideSoftKeyboard();
     }
 
-    private void geoLocate(){
+    private void geoLocate() {
         Log.d(TAG, "geoLocate: geolocating");
 
         String searchString = mSearchText.getText().toString();
 
         Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> list = new ArrayList<>();
-        try{
+        try {
             list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+        } catch (IOException e) {
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
         }
 
-        if(list.size() > 0){
+        if (list.size() > 0) {
             Address address = list.get(0);
 
             Log.d(TAG, "geoLocate: found a location: " + address.toString());
@@ -192,19 +198,19 @@ public class MapsActivity extends FragmentActivity
         }
     }
 
-    private void getDeviceLocation(){
+    private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try{
-            if(mLocationPermissionsGranted){
+        try {
+            if (mLocationPermissionsGranted) {
 
                 final Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             currentLocation = (Location) task.getResult();
 
@@ -212,23 +218,23 @@ public class MapsActivity extends FragmentActivity
                                     DEFAULT_ZOOM,
                                     "My Location");
 
-                        }else{
+                        } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom, String title) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if(!title.equals("My Location")){
+        if (!title.equals("My Location")) {
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
@@ -238,8 +244,8 @@ public class MapsActivity extends FragmentActivity
         hideSoftKeyboard();
     }
 
-    private void getUserDetails(){
-        if(mUserLocation == null){
+    private void getUserDetails() {
+        if (mUserLocation == null) {
             mUserLocation = new UserLocation();
             DocumentReference userRef = mDb.collection(getString(R.string.collection_users))
                     .document(FirebaseAuth.getInstance().getUid());
@@ -247,7 +253,7 @@ public class MapsActivity extends FragmentActivity
             userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Log.d(TAG, "onComplete: successfully set the user client.");
                         User user = task.getResult().toObject(User.class);
                         mUserLocation.setUser(user);
@@ -255,8 +261,7 @@ public class MapsActivity extends FragmentActivity
                     }
                 }
             });
-        }
-        else{
+        } else {
             getLastKnownLocation();
         }
     }
@@ -283,9 +288,9 @@ public class MapsActivity extends FragmentActivity
 
     }
 
-    private void saveUserLocation(){
+    private void saveUserLocation() {
 
-        if(mUserLocation != null){
+        if (mUserLocation != null) {
             DocumentReference locationRef = mDb
                     .collection(getString(R.string.collection_user_locations))
                     .document(FirebaseAuth.getInstance().getUid());
@@ -293,7 +298,7 @@ public class MapsActivity extends FragmentActivity
             locationRef.set(mUserLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Log.d(TAG, "saveUserLocation: \ninserted user location into database." +
                                 "\n latitude: " + mUserLocation.getGeo_point().getLatitude() +
                                 "\n longitude: " + mUserLocation.getGeo_point().getLongitude());
@@ -303,31 +308,31 @@ public class MapsActivity extends FragmentActivity
         }
     }
 
-    private void initMap(){
+    private void initMap() {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
                 getUserDetails();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -339,11 +344,11 @@ public class MapsActivity extends FragmentActivity
         Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
@@ -358,7 +363,7 @@ public class MapsActivity extends FragmentActivity
         }
     }
 
-    private void hideSoftKeyboard(){
+    private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -485,7 +490,11 @@ public class MapsActivity extends FragmentActivity
 
         mMap.setOnMarkerClickListener(marker -> {
             Toast.makeText(MapsActivity.this, "hey!", Toast.LENGTH_SHORT).show();
-            dialogInfo(marker); //get value from marker
+            if(mPolyLinesData.size() > 0) {
+                tripDialog(marker);
+            } else {
+                dialogInfo(marker); //get value from marker
+            }
             return true;
         });
     }
@@ -510,12 +519,19 @@ public class MapsActivity extends FragmentActivity
         title.setText(marker.getTitle());
 
         final TextView snippet = layout.findViewById(R.id.mySnippet);
-        snippet.setText(marker.getSnippet() + "\n\nDetermine route to " + marker.getTitle() + "?");
+        snippet.setText("\n\nDetermine route?");
+
+        final RatingBar ratingBar = layout.findViewById(R.id.ratingBar);
+        if (marker.getSnippet().equals("")) {
+            ratingBar.setRating(0);
+        } else {
+            ratingBar.setRating(Float.parseFloat(marker.getSnippet()));
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setTitle(marker.getTitle());
+
         builder.setView(layout);
-        //builder.setTitle(marker.getTitle());
+
         builder.setMessage("")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -535,10 +551,11 @@ public class MapsActivity extends FragmentActivity
     }
 
     private GeoApiContext mGeoApiContext;
+    private double previousLat, previousLon;
 
-    private void calculateDirections(Marker marker){
+    private void calculateDirections(Marker marker) {
         Log.d(TAG, "calculateDirections: calculating directions.");
-        if(mGeoApiContext == null){
+        if (mGeoApiContext == null) {
             mGeoApiContext = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_map_api_key))
                     .build();
@@ -548,14 +565,29 @@ public class MapsActivity extends FragmentActivity
                 marker.getPosition().latitude,
                 marker.getPosition().longitude
         );
+
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
-        directions.origin(
-                new com.google.maps.model.LatLng(
-                        currentLocation.getLatitude(),
-                        currentLocation.getLongitude()
-                )
-        );
+        if(mPolyLinesData.size() > 0) {
+            directions.origin(
+                    new com.google.maps.model.LatLng(
+                            previousLat,
+                            previousLon
+                    )
+            );
+        } else {
+            directions.origin(
+                    new com.google.maps.model.LatLng(
+                            currentLocation.getLatitude(),
+                            currentLocation.getLongitude()
+                    )
+            );
+
+        }
+
+        previousLat = marker.getPosition().latitude;
+        previousLon = marker.getPosition().longitude;
+
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
         directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
@@ -567,26 +599,29 @@ public class MapsActivity extends FragmentActivity
 
             @Override
             public void onFailure(Throwable e) {
-                Log.e(TAG, "onFailure: " + e.getMessage() );
+                Log.e(TAG, "onFailure: " + e.getMessage());
 
             }
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result){
+    private void addPolylinesToMap(final DirectionsResult result) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: result routes: " + result.routes.length);
+//                if (mPolyLinesData.size() > 0) {
+//                    tripDialog(marker);
+//                }
 
-                for(DirectionsRoute route: result.routes){
+                for (DirectionsRoute route : result.routes) {
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
 
                     // This loops through all the LatLng coordinates of ONE polyline.
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
+                    for (com.google.maps.model.LatLng latLng : decodedPath) {
 
 //                        Log.d(TAG, "run: latlng: " + latLng.toString());
 
@@ -598,11 +633,66 @@ public class MapsActivity extends FragmentActivity
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getApplicationContext(), R.color.darkGrey));
                     polyline.setClickable(true);
-
+                    mPolyLinesData.add(new PolylineData(polyline, route.legs[0]));
                 }
             }
         });
     }
 
+    public void tripDialog(final Marker marker) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        builder.setMessage("Add place to the route?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        calculateDirections(marker);
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        for (PolylineData polylineData : mPolyLinesData) {
+                            polylineData.getPolyline().remove();
+                        }
+                        mPolyLinesData.clear();
+                        mPolyLinesData = new ArrayList<>();
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+
+        int index = 0;
+        for (PolylineData polylineData : mPolyLinesData) {
+            index++;
+            Log.d(TAG, "onPolylineClick: toString: " + polylineData.toString());
+            if (polyline.getId().equals(polylineData.getPolyline().getId())) {
+                polylineData.getPolyline().setColor(ContextCompat.getColor(this, R.color.linkBlue));
+                polylineData.getPolyline().setZIndex(1);
+
+                LatLng endLocation = new LatLng(
+                        polylineData.getLeg().endLocation.lat,
+                        polylineData.getLeg().endLocation.lng
+                );
+
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(endLocation)
+                        .title("Trip #" + index)
+                        .snippet("Duration: " + polylineData.getLeg().duration
+                        ));
+
+
+                marker.showInfoWindow();
+            } else {
+                polylineData.getPolyline().setColor(ContextCompat.getColor(this, R.color.darkGrey));
+                polylineData.getPolyline().setZIndex(0);
+            }
+        }
+    }
 }
