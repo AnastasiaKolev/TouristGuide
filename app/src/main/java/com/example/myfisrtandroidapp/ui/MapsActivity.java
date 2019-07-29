@@ -386,9 +386,9 @@ public class MapsActivity extends FragmentActivity
         NearbyPlaces getNearbyPlaces9 = new NearbyPlaces();
 
 
-        double latitude = 59.934280199999996, longitude = 30.335098600000002;
-        /*latitude = currentLocation.getLatitude();
-        longitude = currentLocation.getLongitude();*/
+        double latitude, longitude ;
+        latitude = currentLocation.getLatitude();
+        longitude = currentLocation.getLongitude();
 
         switch (v.getId()) {
             case R.id.museumsNearby:
